@@ -22,8 +22,11 @@ class BlockController {
      * Implement a GET Endpoint to retrieve a block by index, url: "/api/block/:index"
      */
     getBlockByIndex() {
+        let self = this;
         this.app.get("/api/block/:index", (req, res) => {
             // Add your code here
+            // console.log(req.params);
+            res.send(self.blocks[req.params.index]);            
         });
     }
 
@@ -31,8 +34,17 @@ class BlockController {
      * Implement a POST Endpoint to add a new Block, url: "/api/block"
      */
     postNewBlock() {
+        let self = this;
         this.app.post("/api/block", (req, res) => {
             // Add your code here
+            console.log(req.body.body);
+
+            let blockAux = new BlockClass.Block(req.body.body);
+            blockAux.height = self.blocks.length;
+            blockAux.hash = SHA256(JSON.stringify(blockAux)).toString();
+            this.blocks.push(blockAux);
+
+            res.json(blockAux);            
         });
     }
 
